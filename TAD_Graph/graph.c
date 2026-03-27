@@ -7,15 +7,15 @@ Graph* create_graph(int N) {
     g->n_vertices = N;
 
     // alocacao da matriz
-    g->matriz = malloc(N * sizeof(int*));
+    g->matriz = malloc((N+1) * sizeof(int*));
 
-    for(int i = 0; i < N; i++) {
-        g->matriz[i] = malloc(N*sizeof(int));
+    for(int i = 1; i <= N; i++) {
+        g->matriz[i] = malloc((N+1)*sizeof(int));
     }
     // poe -1 em tudo
-    for (int i = 0; i < N; i++)
+    for (int i = 1; i <= N; i++)
     {
-        for (int j = 0; j < N; j++)
+        for (int j = 1; j <= N; j++)
         {
             g->matriz[i][j] = -1;
         }   
@@ -30,8 +30,8 @@ void add_edge(Graph* g, int v1, int v2, int peso) {
 
 int exist_edge(Graph* g, int v1, int v2) {
     if (g == NULL) return -1;
-    if (v1 < 0 || v1 >= g->n_vertices ||
-        v2 < 0 || v2 >= g->n_vertices
+    if (v1 < 1 || v1 > g->n_vertices ||
+        v2 < 1 || v2 > g->n_vertices
     ) return 0;
     if (g->matriz[v1][v2] != -1) return 1;
     return 0; // caso onde a celula é -1
@@ -41,7 +41,7 @@ int* neighbors(Graph* g, int v1, int *tam) {
     // testar na matriz se ha celulas que nao sao -1 na linha ou coluna do v1
     int* vetor = malloc((g->n_vertices)*sizeof(int));
     int contador = 0;
-    for (int i = 0; i < g->n_vertices; i++)
+    for (int i = 1; i <= g->n_vertices; i++)
     {
         if (g->matriz[v1][i] != -1) {
             vetor[contador] = i;
@@ -52,18 +52,38 @@ int* neighbors(Graph* g, int v1, int *tam) {
     return vetor;
 }
 
-void remove_edge(Graph* g, int v1, int v2){
-    if (g == NULL) return;
+int remove_edge(Graph* g, int v1, int v2){
+    if (g == NULL) return -1;
+
+
+    if (v1 < 1 || v1 > g->n_vertices || v2 < 1 || v2 > g->n_vertices) 
+        return -1;
+
+    if (g->matriz[v1][v2] == -1) return -1;
+
     g->matriz[v1][v2] = -1;
     g->matriz[v2][v1] = -1;
+
+    return 1;
 }
 
-void print_info(Graph* g) {
+void print_info(Graph* g, int* vetor, int tam) {
+    if (g == NULL && vetor == NULL) return;
+
+    if (vetor != NULL) {
+        for (int i = 0; i < tam; i++) {
+            printf("%d", vetor[i]);
+            if (i < tam - 1) printf(" ");
+        }
+        printf("\n");
+        return;
+    }
+    
     printf("V = [");
-    for (int i = 0; i < g->n_vertices; i++)
+    for (int i = 1; i <= g->n_vertices; i++)
     {
-        printf("%d", i+1);
-        if (i < g->n_vertices -1) {
+        printf("%d", i);
+        if (i < g->n_vertices) {
             printf(", ");
         }
     }
@@ -72,15 +92,16 @@ void print_info(Graph* g) {
     // parte da impressao das arestas
     printf("E = [");
     int first = 1;
-
-    for (int i = 0; i < g->n_vertices; i++) {
-        for (int j = i + 1; j < g->n_vertices; j++) {
+    // pelos casos de teste é visivel que quem esta no loop externo é o j
+    // por isso esse for loop esta invertido
+    for (int j = 1; j <= g->n_vertices; j++) {
+        for (int i = 1; i < j; i++) {
             if (g->matriz[i][j] != -1) {
             
                 if (!first) {
                     printf(", ");
                 }
-                printf("(%d,%d)", i, j);
+                printf("(%d, %d)", i, j);
                 first = 0;
             }
         }
@@ -93,11 +114,11 @@ int max_neighbors(Graph* g) {
     int maior = -1;
     int vertice_maior;
 
-    for (int i = 0; i < g->n_vertices; i++)
+    for (int i = 1; i <= g->n_vertices; i++)
     {
         int count = 0;
 
-        for (int j = 0; j < g->n_vertices; j++)
+        for (int j = 1; j <= g->n_vertices; j++)
         {
             if(g->matriz[i][j] != -1) {
                 count++;
@@ -118,7 +139,7 @@ int** retorna_matriz(Graph* g) {
 void delete_graph(Graph* g) {
     if (g == NULL) return;
 
-    for (int i = 0; i < g->n_vertices; i++)
+    for (int i = 1; i <= g->n_vertices; i++)
     {
         free(g->matriz[i]);
     }

@@ -16,9 +16,9 @@ int exist_edge(Graph* g, int v1, int v2);
 
 int* neighbors(Graph* g, int v1, int *tam);
 
-void remove_edge(Graph* g, int v1, int v2);
+int remove_edge(Graph* g, int v1, int v2);
 
-void print_info(Graph* g);
+void print_info(Graph* g, int *vetor, int tam);
 
 int max_neighbors(Graph* g);
 
