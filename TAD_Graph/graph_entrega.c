@@ -1,13 +1,24 @@
+/* ------ TRABALHO 1 GRAFOS -------
+   ALUNOS: 
+   LUCAS VINICIUS DA COSTA (16885265)
+   RYAN SULINO ARRUA (16900070)
+   JOAO VITOR VALERIO SIMPLICIO (15744492)
+
+*/ 
+//
+
+// bibliotecas
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 
-// estrutura do erafo
+// estrutura do grafo
 typedef struct Graph {
     int n_vertices;
-    int **matriz; // matriz 2x2 que representa a matriz de recorrencia
+    int **matriz; // matriz 2x2 que representa a matriz de adjacencia   
 } Graph;
 
+// DECLARACAO DAS FUNCOES
 Graph* create_graph(int N);
 
 void add_edge(Graph* g, int v1, int v2, int peso);
@@ -22,7 +33,7 @@ void print_info(Graph* g, int* vetor, int tam);
 
 int max_neighbors(Graph* g);
 
-int** retorna_matriz(Graph* g);
+void retorna_matriz(Graph* g);
 
 void delete_graph(Graph* g);
 
@@ -96,6 +107,13 @@ int main() {
             }
             break;
 
+        case 5: // case 5 responsavel por imprimir a matriz de adjacencia
+        retorna_matriz(g);
+        // seta as flags para nao impressao de infos do grafo
+        print_status = 0;
+        res_valido = 0;
+        break;
+
         default:
             printf("unrecognized option %d!\n", opcao);
             break;
@@ -103,6 +121,7 @@ int main() {
 
         scanf("%d", &opcao);
     }
+
     // quando o usuario quiser sair do programa com -1 serao checadas as variaveis que comandam a impressao, e sera impresso corretamente as informações
     if(opcao == -1) {
         if(print_status) {
@@ -114,6 +133,7 @@ int main() {
     delete_graph(g); // deleta o grafo quando o programa acaba
     return 0;
 }
+
 
 // ==== FUNCOES ====
 Graph* create_graph(int N) {
@@ -255,8 +275,20 @@ int max_neighbors(Graph* g) {
     return vertice_maior;
 }
 
-int** retorna_matriz(Graph* g) {
-    return g->matriz;
+void retorna_matriz(Graph* g) {
+    printf("Adjacency Matrix:\n");
+
+    // cria dois laços para mostrar cada item da matriz de adjacencia
+    for (int i = 1; i < g->n_vertices; i++)
+    {
+        for (int j = 1; j < g->n_vertices; j++)
+        {
+            if (g->matriz[i][j] == -1) { // se for -1 imprime zero, como o caso do run codes quer
+                printf("%3d ", 0);
+            } else printf("%3d ", g->matriz[i][j]);
+        }
+        printf("\n");
+    } 
 }
 
 void delete_graph(Graph* g) {

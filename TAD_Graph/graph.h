@@ -22,7 +22,7 @@ void print_info(Graph* g, int *vetor, int tam);
 
 int max_neighbors(Graph* g);
 
-int** retorna_matriz(Graph* g);
+void retorna_matriz(Graph* g);
 
 void delete_graph(Graph* g);
 

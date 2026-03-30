@@ -53,6 +53,7 @@ int* neighbors(Graph* g, int v1, int *tam) {
 }
 
 int remove_edge(Graph* g, int v1, int v2){
+    // checa se o grafo existe
     if (g == NULL) return -1;
 
 
@@ -113,11 +114,11 @@ void print_info(Graph* g, int* vetor, int tam) {
 int max_neighbors(Graph* g) {
     int maior = -1;
     int vertice_maior;
-
+    // for loop para conferir a quantidade que cada vertice tem de vizinhos
     for (int i = 1; i <= g->n_vertices; i++)
     {
         int count = 0;
-
+        // faz o loop para conferir quantos vizinhos tem e compara com o maior numero de vizinhos, se for maior atualiza
         for (int j = 1; j <= g->n_vertices; j++)
         {
             if(g->matriz[i][j] != -1) {
@@ -129,11 +130,24 @@ int max_neighbors(Graph* g) {
             vertice_maior = i;
         }
     }
+    // retorna o vertice com mais vizinhos
     return vertice_maior;
 }
 
-int** retorna_matriz(Graph* g) {
-    return g->matriz;
+void retorna_matriz(Graph* g) {
+    printf("Adjacency Matrix:\n");
+
+    // cria dois laços para mostrar cada item da matriz de adjacencia
+    for (int i = 1; i < g->n_vertices; i++)
+    {
+        for (int j = 1; j < g->n_vertices; j++)
+        {
+            if (g->matriz[i][j] == -1) { // se for -1 imprime zero, como o caso do run codes quer
+                printf("%3d ", 0);
+            } else printf("%3d ", g->matriz[i][j]);
+        }
+        printf("\n");
+    } 
 }
 
 void delete_graph(Graph* g) {
