@@ -98,6 +98,7 @@ int main() {
             res = remove_edge(g, x, y);
             // se o nó for removido com sucesso entao printa a info
             // senao printa -1
+            // seta flags de impressao
             if (res == -1) {
                 res_valido = 1;
                 print_status = 0;
@@ -108,12 +109,20 @@ int main() {
             break;
 
         case 5: // case 5 responsavel por imprimir a matriz de adjacencia
-        retorna_matriz(g);
-        // seta as flags para nao impressao de infos do grafo
-        print_status = 0;
-        res_valido = 0;
-        break;
-
+            retorna_matriz(g);
+            // seta as flags para nao impressao de infos do grafo
+            print_status = 0;
+            res_valido = 0;
+            break;
+        
+        case 6: // case 6 responsavel por imprimir o vertice com maior numero de vizinhos
+            res = max_neighbors(g); // chama a funcao com o retorno em res
+            printf("max vertex: %d\n", res);
+            // seta as flags para nao impressao de infos do grafo
+            res_valido = 0;
+            print_status = 0;
+            break;
+            
         default:
             printf("unrecognized option %d!\n", opcao);
             break;
@@ -126,7 +135,7 @@ int main() {
     if(opcao == -1) {
         if(print_status) {
             print_info(g, NULL, 0);
-    }  else if (res_valido) {
+    }else if (res_valido) {
         printf("%d\n", res);
     }
 }
@@ -158,6 +167,7 @@ Graph* create_graph(int N) {
 }
 
 void add_edge(Graph* g, int v1, int v2, int peso) {
+    if (g == NULL) return;
     // poe nas celulas correspondentes da matriz o peso que foi informado
     g->matriz[v1][v2] = peso;
     g->matriz[v2][v1] = peso;
@@ -253,6 +263,8 @@ void print_info(Graph* g, int* vetor, int tam) {
 
 
 int max_neighbors(Graph* g) {
+    if (g == NULL) return -1;
+
     int maior = -1;
     int vertice_maior;
     // vai checando em cada vertices os seus vizinhos e assinalando o maior numero a cada loop
@@ -276,12 +288,14 @@ int max_neighbors(Graph* g) {
 }
 
 void retorna_matriz(Graph* g) {
+    if (g == NULL) return;
+
     printf("Adjacency Matrix:\n");
 
     // cria dois laços para mostrar cada item da matriz de adjacencia
-    for (int i = 1; i < g->n_vertices; i++)
+    for (int i = 1; i <= g->n_vertices; i++)
     {
-        for (int j = 1; j < g->n_vertices; j++)
+        for (int j = 1; j <= g->n_vertices; j++)
         {
             if (g->matriz[i][j] == -1) { // se for -1 imprime zero, como o caso do run codes quer
                 printf("%3d ", 0);

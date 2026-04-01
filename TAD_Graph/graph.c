@@ -24,20 +24,26 @@ Graph* create_graph(int N) {
 }
 
 void add_edge(Graph* g, int v1, int v2, int peso) {
+    if (g == NULL) return;
+
     g->matriz[v1][v2] = peso;
     g->matriz[v2][v1] = peso;
 }
 
 int exist_edge(Graph* g, int v1, int v2) {
     if (g == NULL) return -1;
+
     if (v1 < 1 || v1 > g->n_vertices ||
         v2 < 1 || v2 > g->n_vertices
     ) return 0;
+
     if (g->matriz[v1][v2] != -1) return 1;
+    
     return 0; // caso onde a celula é -1
 }
 
 int* neighbors(Graph* g, int v1, int *tam) {
+    if (g == NULL) return;
     // testar na matriz se ha celulas que nao sao -1 na linha ou coluna do v1
     int* vetor = malloc((g->n_vertices)*sizeof(int));
     int contador = 0;
@@ -112,6 +118,9 @@ void print_info(Graph* g, int* vetor, int tam) {
 
 
 int max_neighbors(Graph* g) {
+
+    if (g == NULL) return -1;
+
     int maior = -1;
     int vertice_maior;
     // for loop para conferir a quantidade que cada vertice tem de vizinhos
@@ -135,12 +144,14 @@ int max_neighbors(Graph* g) {
 }
 
 void retorna_matriz(Graph* g) {
+    if (g == NULL) return;
+
     printf("Adjacency Matrix:\n");
 
     // cria dois laços para mostrar cada item da matriz de adjacencia
-    for (int i = 1; i < g->n_vertices; i++)
+    for (int i = 1; i <= g->n_vertices; i++)
     {
-        for (int j = 1; j < g->n_vertices; j++)
+        for (int j = 1; j <= g->n_vertices; j++)
         {
             if (g->matriz[i][j] == -1) { // se for -1 imprime zero, como o caso do run codes quer
                 printf("%3d ", 0);
